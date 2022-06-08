@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import Addpart from './components/Addpart/Addpart';
+import Viewpart from './components/Viewpart/Viewpart';
+import { useState,useEffect } from 'react';
+import { TextRotationAngledownSharp } from '@material-ui/icons';
 function App() {
+  const [todo,setTodo]=useState([])
+  
+  const todolist=(e)=>{
+    setTodo([...todo,{...e}])
+    console.log("e",e)
+    console.log("todo",todo)
+  }
+  const removeId=(a)=>{
+    const filtdata=todo.filter((check,i,rep)=>{
+   
+ return (i !==a)
+   });
+   setTodo(filtdata)
+ }
+  useEffect(()=>{
+    const localdata=JSON.parse(localStorage.getItem("todolistdata"));
+    setTodo(localdata)
+  },[])
+  useEffect(()=>{
+    localStorage.setItem("todolistdata",JSON.stringify(todo))
+  
+  },[todo]);
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <div><Addpart list={todolist}/></div>
+        <div><Viewpart todos={todo} remove={removeId}/></div> 
+       </>
   );
 }
 
